@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technews</title>
+</head>
+<header>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Technews</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'allstories-list' %}">DRF API</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'api-root' %}">DRF APIdoc</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listing' page_obj.number %}?type=story">Stories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listing' page_obj.number %}?type=job">Jobs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listing' page_obj.number %}?type=poll">Polls</a>
+
+              </li>
+             
+              
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+</header>
+<body>
+    
+<ul style='list-style-type: none'>
+    {% for i in page_obj %}
+    <li class='each-heading'>
+        {% include 'body.html' %}
+    </li>
+    {% endfor %}
+    {% include 'pagination.html' %}
+</ul>
+<div class="list-group">
+    <p class=>News Items</p>
+    <ul class= "list-group-item list-group-item-action active" aria-current="true"></ul>
+    {% for i in page_obj %}
+    <section class="d-flex w-100 justify-content-between">
+        {% if i.url %}
+        <a  class="mb-1" href="{{ i.url }}" class='h1'>{{i.title}} ({{i.type}})</a><a class='beside-h1' href="{{i.url}}">{{ i.url }}</a>
+        {% else %}
+        <a href="{% url 'comments' i.pk %}" class='h1'>{{ i.title }} ({{i.type}})</a>
+        {% endif %}
+    </section>
+    <section class="d-flex w-100 justify-content-between">
+        <span class=''>{{ i.score }} points by {{i.by}} <a href="{% url 'comments' i.pk %}">{{i.time|timesince}} ago</a></span>
+        {% if i.type == 'story' or i.type == 'poll' %}
+        |
+        {% endif %}
+        <a href="{% url 'comments' i.pk %}">
+            {% if i.type == 'story' %}
+            {{ i.story_comments.count }}
+            {% if i.story_comments.count > 1 %}
+            comments
+            {% else %}
+            comment
+            {% endif %}
+            {% elif i.type == 'poll' %}
+            {{i.poll_comments.count}}
+            {% if i.poll_comments.count > 1 %}
+            comments
+            {% else %}
+            comment
+            {% endif %}
+            {% endif %}
+        </a>
+    </section>
+    {% endfor %}
+      
+    </ul>
+</body>
+</html>

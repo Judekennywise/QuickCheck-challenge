@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <title>{% block title %}News Feed{% endblock %}</title>
+    <link rel='stylesheet' href="{% static 'css/base.css'%}" type='text/css' />
+    <link rel='stylesheet' href="{% static 'css/body.css'%}" type='text/css' />
+    {% block extra %}{% endblock %}
+</head>
+
+<body>
+    {% block header %}
+    {% endblock %}
+    {% block main %}
+    {% endblock %}
+    {% block footer %}
+    <footer>
+        <p>Project by <a href='https://davisphem.me' class='footer'>David Oluwafemi</a>
+    </footer>
+    {% endblock %}
+</body>
+
+</html>
